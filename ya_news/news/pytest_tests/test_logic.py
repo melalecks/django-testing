@@ -66,4 +66,3 @@ def test_comment_with_bad_words(log_author, news_url):
     form = response.context['form']
     assert count_before == Comment.objects.count()
     assertFormError(form, 'text', WARNING)
-
