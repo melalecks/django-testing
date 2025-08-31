@@ -3,8 +3,9 @@ from http import HTTPStatus
 import pytest
 from pytest_django.asserts import assertRedirects
 
+pytestmark = pytest.mark.django_db
 
-@pytest.mark.django_db
+
 @pytest.mark.parametrize('parametrized_client, url, method, status', (
     (pytest.lazy_fixture('client'), pytest.lazy_fixture('login_url'),
      'get', HTTPStatus.OK),

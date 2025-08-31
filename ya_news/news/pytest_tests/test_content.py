@@ -3,15 +3,14 @@ from django.conf import settings
 
 from news.forms import CommentForm
 
+pytestmark = pytest.mark.django_db
 
-@pytest.mark.django_db
+
 def test_amount_of_news(client, homepage_url, create_news):
-    response = client.get(homepage_url)
-    object_list = response.context['object_list']
-    assert object_list.count() == settings.NEWS_COUNT_ON_HOME_PAGE
+    assert client.get(homepage_url).context['object_list'].count(
+    ) == settings.NEWS_COUNT_ON_HOME_PAGE
 
 
-@pytest.mark.django_db
 def test_sorting_of_news(client, homepage_url, create_news):
     response = client.get(homepage_url)
     object_list = response.context['object_list']
@@ -20,7 +19,6 @@ def test_sorting_of_news(client, homepage_url, create_news):
     assert all_dates == sorted_dates
 
 
-@pytest.mark.django_db
 def test_sorting_of_comments(client, news_url, create_comments):
     response = client.get(news_url)
     news_detail = response.context['news']
@@ -30,14 +28,11 @@ def test_sorting_of_comments(client, news_url, create_comments):
     assert all_dates == sorted_dates
 
 
-@pytest.mark.django_db
 def test_comment_form_unavailable_for_anonymous(client, news_url):
     assert 'form' not in client.get(news_url).context
 
 
-@pytest.mark.django_db
 def test_comment_form_available_for_authorised(log_reader, news_url):
-    response = log_reader.get(news_url).context
-    assert 'form' in response
-    form = response['form']
-    assert isinstance(form, CommentForm)
+    response_context = log_reader.get(news_url).context
+    assert 'form' in response_context
+    assert isinstance(response_context['form'], CommentForm)

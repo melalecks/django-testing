@@ -91,7 +91,7 @@ def create_news():
     some_news = [
         News(title=f'Новость{id}', text='Текст',
              date=current_date - timedelta(days=id))
-        for id in range(settings.NEWS_COUNT_ON_HOME_PAGE)
+        for id in range(settings.NEWS_COUNT_ON_HOME_PAGE + 1)
     ]
     News.objects.bulk_create(some_news)
 
@@ -103,8 +103,3 @@ def create_comments(news, author):
         comment = Comment(text='Текст', news=news, author=author)
         comment.created = now + timedelta(days=id)
         comment.save()
-
-
-@pytest.fixture
-def form_data():
-    return {'text': 'Новый текст'}
