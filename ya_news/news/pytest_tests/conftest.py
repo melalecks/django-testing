@@ -100,6 +100,7 @@ def create_news():
 def create_comments(news, author):
     now = datetime.now()
     for id in range(10):
-        comment = Comment(text='Текст', news=news, author=author)
+        comment = Comment.objects.create(text='Текст', news=news,
+                                         author=author)
         comment.created = now + timedelta(days=id)
         comment.save()

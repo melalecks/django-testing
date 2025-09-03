@@ -1,5 +1,6 @@
 from http import HTTPStatus
 
+from django.contrib.auth import get_user
 from pytils.translit import slugify
 
 from .base import BaseTest
@@ -26,7 +27,7 @@ class TestLogic(BaseTest):
         self.auth_author.post(self.urls['add'], data=self.form_data)
         self.assertEqual(Note.objects.count(), 1)
         new_note = Note.objects.get()
-        self.assertEqual(new_note.author, self.author)
+        self.assertEqual(new_note.author, get_user(self.auth_author))
         self.assertEqual(new_note.title, self.form_data['title'])
         self.assertEqual(new_note.text, self.form_data['text'])
         self.assertEqual(new_note.slug, self.form_data['slug'])
@@ -60,7 +61,7 @@ class TestLogic(BaseTest):
         self.assertEqual(edit_note.title, self.form_data['title'])
         self.assertEqual(edit_note.text, self.form_data['text'])
         self.assertEqual(edit_note.slug, self.form_data['slug'])
-        self.assertEqual(edit_note.author, self.author)
+        self.assertEqual(edit_note.author, self.note.author)
 
     def test_reader_cant_delete(self):
         count_before_delete = Note.objects.count()
@@ -77,4 +78,4 @@ class TestLogic(BaseTest):
         self.assertEqual(edit_note.title, self.note.title)
         self.assertEqual(edit_note.text, self.note.text)
         self.assertEqual(edit_note.slug, self.note.slug)
-        self.assertEqual(edit_note.author, self.author)
+        self.assertEqual(edit_note.author, self.note.author)

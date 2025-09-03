@@ -15,9 +15,9 @@ class TestContent(BaseTest):
         self.assertNotIn(self.note, notes)
 
     def test_create_and_edit_contain_form(self):
-        urls = [self.urls['edit'], self.urls['add']]
-        for url_name in urls:
-            with self.subTest(url_name=url_name):
-                response = self.auth_author.get(url_name)
+        url_names = ['edit', 'add']
+        for url in url_names:
+            with self.subTest(url=url):
+                response = self.auth_author.get(self.urls[url])
                 self.assertIn('form', response.context)
                 self.assertIsInstance(response.context['form'], NoteForm)

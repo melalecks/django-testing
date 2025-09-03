@@ -31,8 +31,8 @@ def test_authorised_can_send_comments(log_reader, reader, news, news_url):
 def test_author_can_edit(log_author, author, news, edit_url, comment):
     log_author.post(edit_url, FORM_DATA)
     edit_comment = Comment.objects.get(id=comment.id)
-    assert edit_comment.news == news
-    assert edit_comment.author == author
+    assert edit_comment.news == comment.news
+    assert edit_comment.author == comment.author
     assert edit_comment.text == FORM_DATA['text']
 
 

@@ -1,4 +1,7 @@
 from http import HTTPStatus
+
+from django.contrib.auth import get_user
+
 from .base import BaseTest
 
 
@@ -27,7 +30,8 @@ class TestRoutes(BaseTest):
         ]
 
         for url_name, client, method, status in test_cases:
-            with self.subTest(url_name=url_name, client=client, method=method):
+            with self.subTest(url_name=url_name, client=get_user(client),
+                              method=method):
                 url = self.urls[url_name]
                 response = getattr(client, method)(url)
                 self.assertEqual(response.status_code, status)
